@@ -1,0 +1,13 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.eleytren.metro_car.pitch": {
+      "loop": true,
+      "bones": {
+        "body": {
+          "rotation": ["-query.property('eleytren:pitch')", 0, 0]
+        }
+      }
+    }
+  }
+}

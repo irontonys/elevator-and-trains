@@ -1,0 +1,28 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "pack.name",
+    "description": "pack.description",
+    "uuid": "c5e1b25c-d91b-4b6e-a9f3-7bb91a3a67f8",
+    "version": [0, 0, 0],
+    "min_engine_version": [1, 26, 50]
+  },
+  "modules": [
+    {
+      "description": "elevadores-trenes: recursos",
+      "type": "resources",
+      "uuid": "28d20d12-240d-415b-bdcf-33b2dd5cefe0",
+      "version": [0, 0, 0]
+    }
+  ],
+  "dependencies": [
+    {
+      "uuid": "f2628ae9-e34c-4b45-9c79-74ed9d2fbf04",
+      "version": [0, 0, 0]
+    }
+  ],
+  "metadata": {
+    "authors": ["Daniel"],
+    "product_type": "addon"
+  }
+}

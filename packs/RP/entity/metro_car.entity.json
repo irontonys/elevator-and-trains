@@ -1,0 +1,26 @@
+{
+  "format_version": "1.26.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "eleytren:metro_car",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/eleytren_metro_car"
+      },
+      "geometry": {
+        "default": "geometry.eleytren.metro_car"
+      },
+      "animations": {
+        "pitch": "animation.eleytren.metro_car.pitch"
+      },
+      "scripts": {
+        "animate": ["pitch"],
+        "should_update_effects_offscreen": "1.0",
+        "should_update_bones_and_effects_offscreen": "1.0"
+      },
+      "render_controllers": ["controller.render.eleytren.metro_car"]
+    }
+  }
+}

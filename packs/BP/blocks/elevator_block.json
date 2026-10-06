@@ -1,0 +1,28 @@
+{
+  "format_version": "1.26.50",
+  "minecraft:block": {
+    "description": {
+      "identifier": "eleytren:elevator_block",
+      "menu_category": {
+        "category": "construction"
+      }
+    },
+    "components": {
+      "minecraft:geometry": "minecraft:geometry.full_block",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "eleytren_elevator_block",
+          "render_method": "opaque"
+        }
+      },
+      "minecraft:tags": ["minecraft:is_pickaxe_item_destructible"],
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 1.5
+      },
+      "minecraft:destructible_by_explosion": {
+        "explosion_resistance": 6
+      },
+      "minecraft:map_color": "#9a9fa6"
+    }
+  }
+}

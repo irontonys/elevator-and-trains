@@ -1,0 +1,10 @@
+pack.name=Elevators and Trains (RP)
+pack.description=Building elevators and subway trains.
+
+tile.eleytren:elevator_block.name=Elevator Block
+eleytren.elevator.bar=Floor %s / %s
+eleytren.elevator.bar_top=PH / %s
+eleytren.elevator.bar_ground=G / %s
+item.eleytren.metro_car.name=Subway Car
+entity.eleytren:metro_car.name=Subway Car
+eleytren.train.no_track=Not enough track: the car needs at least 5 connected rail blocks.

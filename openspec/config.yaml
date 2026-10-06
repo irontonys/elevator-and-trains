@@ -1,0 +1,38 @@
+schema: spec-driven
+
+context: |
+  Language: es
+  All artifacts must be written in es.
+  Keep OpenSpec structural headings and SHALL/MUST keywords in English.
+
+  Project: Minecraft Bedrock add-on "elevadores-trenes" (building elevators with custom start/limit
+  blocks + large subway trains on vanilla rails), published on MCPDL.
+  See CLAUDE.md for full rules. Hard constraints for every change:
+  - Target ONLY the latest stable Bedrock release (@minecraft/server "latest" dist-tag); never beta/rc/preview or experimental toggles.
+  - Namespace eleytren: for all identifiers. Never override vanilla (minecraft:*) content.
+  - No JSON UI; UI only via @minecraft/server-ui.
+  - Manifest UUIDs are never regenerated once published.
+  - Removing the add-on from a world must not break it: no permanent changes to vanilla blocks, no scoreboards/commands the world depends on.
+  - TypeScript + esbuild bundle; tested on iPad/iPhone via .mcaddon (Content Log must be clean).
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing

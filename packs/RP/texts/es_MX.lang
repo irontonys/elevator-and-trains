@@ -1,0 +1,10 @@
+pack.name=Elevadores y Trenes (RP)
+pack.description=Elevadores de edificio y trenes de metro.
+
+tile.eleytren:elevator_block.name=Bloque de elevador
+eleytren.elevator.bar=Piso %s / %s
+eleytren.elevator.bar_top=PH / %s
+eleytren.elevator.bar_ground=PB / %s
+item.eleytren.metro_car.name=Vagón de metro
+entity.eleytren:metro_car.name=Vagón de metro
+eleytren.train.no_track=Falta vía: el vagón necesita al menos 5 bloques de riel conectados.

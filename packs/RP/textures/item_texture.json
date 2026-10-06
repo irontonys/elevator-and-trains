@@ -1,0 +1,9 @@
+{
+  "resource_pack_name": "eleytren",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "eleytren_metro_car": {
+      "textures": "textures/items/eleytren_metro_car"
+    }
+  }
+}
