@@ -1,0 +1,12 @@
+{
+  "entity_sounds": {
+    "entities": {
+      "eleytren:metro_car": {
+        "events": {
+          "step": "",
+          "heavy.step": ""
+        }
+      }
+    }
+  }
+}

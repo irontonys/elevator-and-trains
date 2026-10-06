@@ -64,7 +64,8 @@ detector y activador) según la dirección de cada riel, incluidas curvas y pend
 detector y activador SHALL tratarse como rieles normales; los propulsores siguen la vía igual que los
 demás y además cambian la velocidad (ver "Rieles propulsores"). Cada extremo del vagón SHALL seguir la
 vía por separado, de modo que en una curva el vagón gira poco a poco en lugar de cambiar de dirección
-de golpe. En las pendientes la carrocería SHALL inclinarse con la vía, tanto de subida como de bajada.
+de golpe. En las pendientes la carrocería SHALL inclinarse con la vía, tanto de subida como de bajada,
+y la inclinación MUST NOT producir errores ni warnings en el Content Log.
 Si la vía se acaba o la parte siguiente no está cargada, el vagón SHALL detenerse en el último punto de
 la vía.
 
@@ -83,6 +84,10 @@ la vía.
 #### Scenario: Bajada
 - **WHEN** el vagón baja por rieles inclinados
 - **THEN** baja con la vía y la carrocería se inclina con el frente hacia abajo
+
+#### Scenario: Log limpio en movimiento
+- **WHEN** un tren recorre una vía con rectas, curvas y pendientes
+- **THEN** el Content Log no muestra errores ni warnings del add-on
 
 #### Scenario: Fin de la vía
 - **WHEN** el vagón llega al último riel de una vía
@@ -207,3 +212,20 @@ de los propios vagones.
 #### Scenario: Guardar y volver a abrir
 - **WHEN** se cierra y se vuelve a abrir el mundo con un tren de 3 vagones
 - **THEN** los 3 vagones siguen enganchados y se mueven juntos
+
+### Requirement: Sonido sobre la vía
+Mientras el tren avanza, cada vagón SHALL sonar como un carrito vanilla sobre la vía (`minecart.base`),
+más fuerte a mayor velocidad. El vagón MUST NOT hacer sonidos de pasos al moverse. Detenido, el tren
+MUST NOT hacer el sonido de rieles.
+
+#### Scenario: Tren en movimiento
+- **WHEN** el conductor avanza con el tren
+- **THEN** se escucha el sonido de un carrito sobre la vía y no se escuchan pasos
+
+#### Scenario: Más velocidad
+- **WHEN** el tren pasa de ir despacio a ir sobre propulsores encendidos
+- **THEN** el sonido de rieles se escucha más fuerte y un poco más agudo
+
+#### Scenario: Tren detenido
+- **WHEN** el tren se detiene en una estación
+- **THEN** deja de escucharse el sonido de rieles

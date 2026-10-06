@@ -1,4 +1,4 @@
-pack.name=Elevadores y Trenes (RP)
+pack.name=Elevator & Trains (RP)
 pack.description=Elevadores de edificio y trenes de metro.
 
 tile.eleytren:elevator_block.name=Bloque de elevador

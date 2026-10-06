@@ -1,6 +1,6 @@
 {
   "name": "elevadores-trenes",
-  "version": "0.3.0",
+  "version": "0.3.3",
   "private": true,
   "description": "Add-on de Minecraft Bedrock con elevadores de edificio y trenes de metro.",
   "type": "module",

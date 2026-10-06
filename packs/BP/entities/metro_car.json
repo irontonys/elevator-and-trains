@@ -4,15 +4,7 @@
     "description": {
       "identifier": "eleytren:metro_car",
       "is_spawnable": false,
-      "is_summonable": true,
-      "properties": {
-        "eleytren:pitch": {
-          "type": "float",
-          "range": [-45, 45],
-          "default": 0,
-          "client_sync": true
-        }
-      }
+      "is_summonable": true
     },
     "components": {
       "minecraft:type_family": {

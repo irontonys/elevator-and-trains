@@ -1,9 +1,9 @@
 // Trenes de metro: vagones enganchados que siguen la vía, conductor, propulsores, choques y golpes.
 import { Entity, EntityInventoryComponent, EntityRideableComponent, GameMode, ItemStack, Player, system, world } from "@minecraft/server";
 import { poseOf } from "./bogies";
-import { HIT_WINDOW_TICKS, HITS_TO_REMOVE, METRO_CAR_ID, PITCH_EPSILON, PITCH_PROPERTY } from "./config";
+import { HIT_WINDOW_TICKS, HITS_TO_REMOVE, METRO_CAR_ID, ROLL_SOUND, ROLL_SOUND_TICKS } from "./config";
 import { CAR_SPACING, carCenters, findContact, findNeighbor, joinOrder, MAX_CARS, moveConsist, type CarPoint } from "./consist";
-import { nextMotion, type Motion, type RailEffect } from "./physics";
+import { nextMotion, rollSound, type Motion, type RailEffect } from "./physics";
 import { railAtFor, railEffectAt } from "./rails";
 import { advance, cursorAt, headingOf, nearestOnBlock, pointAt, reverse, type Cursor, type Vec3 } from "./track";
 
@@ -25,6 +25,8 @@ interface Consist {
   points: Vec3[];
   pitches: number[];
   motion: Motion;
+  /** Tick del último sonido de rieles. */
+  soundTick: number;
 }
 
 interface SavedCar {
@@ -73,7 +75,7 @@ export function placeCar(entity: Entity, center: Cursor): void {
     consist.head = advance(railAt, center, neighbor.direction * neighbor.shift).cursor;
     join(consist, neighbor.car, neighbor.direction);
   }
-  refreshPoses(consist, true);
+  refreshPoses(consist);
 }
 
 function loadCar(entity: Entity): void {
@@ -82,7 +84,7 @@ function loadCar(entity: Entity): void {
   if (!saved || saved.count <= 1 || consists.has(saved.id)) {
     // Tren de un vagón (o su tren ya se rearmó sin él): queda solo.
     const head = snapToTrack(entity);
-    if (head) refreshPoses(createConsist([entity], head, saved && !consists.has(saved.id) ? saved.id : newId(entity)), false);
+    if (head) refreshPoses(createConsist([entity], head, saved && !consists.has(saved.id) ? saved.id : newId(entity)));
     return;
   }
   let group = pending.get(saved.id);
@@ -101,7 +103,7 @@ function buildPending(id: string): void {
   const head = cars[0] && snapToTrack(cars[0]);
   if (!head) return;
   const consist = createConsist(cars, head, id);
-  refreshPoses(consist, true);
+  refreshPoses(consist);
 }
 
 /** Un vagón dejó de existir en el mundo (descargado o quitado): su tren espera a que vuelva. */
@@ -117,7 +119,7 @@ function suspendCar(entityId: string): void {
 }
 
 function createConsist(cars: Entity[], head: Cursor, id: string): Consist {
-  const consist: Consist = { id, cars, head, centers: [], points: [], pitches: cars.map(() => 0), motion: { speed: 0, departing: false } };
+  const consist: Consist = { id, cars, head, centers: [], points: [], pitches: cars.map(() => 0), motion: { speed: 0, departing: false }, soundTick: -ROLL_SOUND_TICKS };
   consists.set(id, consist);
   for (const car of cars) carConsist.set(car.id, consist);
   save(consist);
@@ -210,22 +212,34 @@ function step(consist: Consist): void {
   const result = moveConsist(railAt, consist.head, consist.cars.length, contact ? direction * contact.allowed : speed);
   consist.head = result.center;
   if (result.blocked || contact) consist.motion = { ...consist.motion, speed: 0 };
-  if (result.moved !== 0) refreshPoses(consist, false);
+  if (result.moved !== 0) {
+    refreshPoses(consist);
+    playRollSound(consist);
+  }
   if (contact) join(consist, contact.car, direction);
 }
 
-/** Recalcula los centros y mueve cada vagón a su lugar sobre la vía. */
-function refreshPoses(consist: Consist, force: boolean): void {
+/** Sonido del carrito sobre la vía en cada vagón, repetido mientras el tren se mueve. */
+function playRollSound(consist: Consist): void {
+  if (system.currentTick - consist.soundTick < ROLL_SOUND_TICKS) return;
+  const sound = rollSound(consist.motion.speed);
+  if (!sound) return;
+  consist.soundTick = system.currentTick;
+  for (const car of consist.cars) car.dimension.playSound(ROLL_SOUND, car.location, sound);
+}
+
+/**
+ * Recalcula los centros y mueve cada vagón a su lugar sobre la vía. La inclinación va en la rotación X
+ * de la entidad (negativa = frente hacia arriba) y el RP la lee con `query.body_x_rotation`.
+ */
+function refreshPoses(consist: Consist): void {
   const railAt = railAtFor(consist.cars[0]!.dimension);
   consist.centers = carCenters(railAt, consist.head, consist.cars.length);
   consist.points = consist.centers.map((c) => pointAt(c));
   consist.cars.forEach((car, k) => {
     const pose = poseOf(railAt, consist.centers[k]!);
-    car.teleport(pose.position, { rotation: { x: 0, y: pose.yaw } });
-    if (force || Math.abs(pose.pitch - consist.pitches[k]!) > PITCH_EPSILON) {
-      consist.pitches[k] = pose.pitch;
-      car.setProperty(PITCH_PROPERTY, pose.pitch);
-    }
+    car.teleport(pose.position, { rotation: { x: -pose.pitch, y: pose.yaw } });
+    consist.pitches[k] = pose.pitch;
   });
 }
 
@@ -276,7 +290,7 @@ function join(mine: Consist, hit: CarPoint<Consist>, direction: 1 | -1): void {
   dropConsist(mine);
   const head = advance(railAt, mine.head, direction * joined.headShift).cursor;
   const consist = createConsist(joined.order, head, mine.id);
-  refreshPoses(consist, true);
+  refreshPoses(consist);
 }
 
 /** Desengancha el vagón de lo que tiene delante: el tren se parte en dos. */
@@ -297,12 +311,12 @@ function splitAround(consist: Consist, index: number, remove: boolean): void {
   if (front.length > 0) {
     const a = createConsist(front, consist.head, consist.id);
     a.motion = consist.motion;
-    refreshPoses(a, true);
+    refreshPoses(a);
   }
   if (back.length > 0) {
     const b = createConsist(back, backHead, newId(back[0]!));
     b.motion = consist.motion;
-    refreshPoses(b, true);
+    refreshPoses(b);
   }
 }
 

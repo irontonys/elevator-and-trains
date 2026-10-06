@@ -9,8 +9,11 @@ custom (inicio/límite) y trenes de metro grandes sobre rieles vanilla. Detalle 
 `.claude/context/objetivo.md`.
 
 ## Estado
-- Fase: 0.3.0 probada en iPad (elevador, metro, propulsores y vagones unidos). Los 3 changes están
-  archivados; specs vigentes en `openspec/specs/`. Paleta del metro = placeholder hasta tener fotos.
+- Fase: 0.3.3 probada en iPad (elevador, metro, propulsores, vagones unidos, inclinación, sonido de
+  rieles e ícono). Todos los changes están archivados; specs vigentes en `openspec/specs/`. Paleta del
+  metro = placeholder hasta tener fotos.
+- Siguiente: publicar en CurseForge → MCPEDL (desde abril de 2025 MCPEDL solo recibe por CurseForge).
+  Textos, avatar, portada y checklist en `publish/`; faltan las capturas del iPad.
 - Actualizado: 2026-10-06
 
 ## Stack
@@ -35,6 +38,10 @@ custom (inicio/límite) y trenes de metro grandes sobre rieles vanilla. Detalle 
   los rieles con caché de 1 s), `config.ts` (constantes).
 - `tools/gen-metro.mjs`: genera el modelo, la textura y el ícono del vagón (su salida se versiona en
   `packs/RP`; `PALETTE` al inicio). `--preview <carpeta>` saca vistas previas.
+- `tools/gen-art.mjs`: renderiza el vagón real y genera `pack_icon.png` (BP y RP), `publish/avatar.png` y
+  `publish/cover.png`. Se corre a mano después de `gen-metro.mjs`.
+- `publish/`: material de la publicación (`listing.md` con textos y checklist). No entra al `.mcaddon`.
+  En los textos públicos el vagón es solo "metro": no se menciona ninguna ciudad ni marca.
 - `tools/build.mjs`: typecheck → copia packs → versión de `package.json` → esbuild → `.mcaddon`.
   `tools/test.mjs`: corre las pruebas con mocks.
 - `dist/` (ignorado): `eleytren_BP/`, `eleytren_RP/` y `elevadores-trenes.mcaddon`.
@@ -61,7 +68,8 @@ npm run build:release # release: minificado y sin aviso
 - **Tren:** vagón de metro (estilo Metrorrey, sin logos) de ~6 bloques que corre sobre rieles vanilla
   existentes. Lo maneja el primer jugador que sube a la cabeza (adelante/atrás); el script lo mueve
   siguiendo la vía, no la física del carrito vanilla. Propulsor encendido = acelera solo (20 b/s),
-  apagado = estación. Hasta 4 vagones enganchados.
+  apagado = estación. Hasta 4 vagones enganchados. La inclinación va en la rotación X del vagón (sin
+  propiedades de entidad) y suena `minecart.base` en lugar de pasos.
 
 ## Reglas para Claude en este proyecto
 - **Nunca sobrescribir contenido vanilla** (`minecraft:*`, rieles, etc.). Solo contenido propio.

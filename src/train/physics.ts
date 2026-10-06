@@ -9,6 +9,7 @@ import {
   MAX_REVERSE_SPEED,
   MAX_SPEED,
   NO_DRIVER_BRAKE,
+  ROLL_SOUND_MIN_SPEED,
 } from "./config";
 
 /** Riel bajo el tren: propulsor encendido, propulsor apagado o cualquier otro. */
@@ -54,4 +55,14 @@ function driverSpeed(speed: number, input: number | undefined): number {
 
 function approach(value: number, target: number, delta: number): number {
   return value > target ? Math.max(target, value - delta) : Math.min(target, value + delta);
+}
+
+/**
+ * Volumen y tono del sonido de rieles a una velocidad (bloques/tick), o `undefined` si va tan despacio
+ * que no suena. Como el carrito: el volumen llega a 0.7 a 10 b/s; el tono va de 0.8 a 1.2 a 20 b/s.
+ */
+export function rollSound(speed: number): { volume: number; pitch: number } | undefined {
+  const s = Math.abs(speed);
+  if (s < ROLL_SOUND_MIN_SPEED) return undefined;
+  return { volume: 0.7 * Math.min(1, s / 0.5), pitch: 0.8 + 0.4 * Math.min(1, s / BOOST_MAX_SPEED) };
 }

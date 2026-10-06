@@ -2,7 +2,6 @@
 
 export const METRO_CAR_ID = "eleytren:metro_car";
 export const METRO_SPAWNER_COMPONENT = "eleytren:metro_spawner";
-export const PITCH_PROPERTY = "eleytren:pitch";
 
 /** 12 bloques/s hacia el frente con el conductor (el carrito vanilla va a ~8). */
 export const MAX_SPEED = 0.6;
@@ -22,8 +21,12 @@ export const COAST_DRAG = 0.004;
 export const NO_DRIVER_BRAKE = 0.02;
 /** Umbral del joystick para contar como "adelante" o "atrás". */
 export const INPUT_DEADZONE = 0.3;
-/** Cambio mínimo de inclinación (grados) para mandarlo al cliente. */
-export const PITCH_EPSILON = 0.5;
+
+/** Sonido vanilla del carrito sobre la vía; dura ~1.9 s, se repite cada `ROLL_SOUND_TICKS`. */
+export const ROLL_SOUND = "minecart.base";
+export const ROLL_SOUND_TICKS = 36;
+/** Por debajo de esta velocidad (bloques/tick) los rieles no suenan. */
+export const ROLL_SOUND_MIN_SPEED = 0.02;
 
 /** Golpes del mismo jugador, en esta ventana de ticks, para quitar el vagón. */
 export const HITS_TO_REMOVE = 3;

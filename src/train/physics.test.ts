@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { BOOST_MAX_SPEED, MAX_REVERSE_SPEED, MAX_SPEED } from "./config";
-import { nextMotion, type Motion, type RailEffect } from "./physics";
+import { nextMotion, rollSound, type Motion, type RailEffect } from "./physics";
 
 /** Velocidad del carrito vanilla en recta: ~8 bloques/s. */
 const MINECART_SPEED = 8 / 20;
@@ -94,3 +94,13 @@ function untilStopped(start: Motion, input: number | undefined, rail: RailEffect
 function near(actual: number, expected: number): void {
   assert.ok(Math.abs(actual - expected) < 1e-9, `${actual} ≠ ${expected}`);
 }
+
+test("sonido de rieles: callado detenido, más fuerte y agudo con más velocidad", () => {
+  assert.equal(rollSound(0), undefined);
+  assert.equal(rollSound(0.01), undefined);
+  const slow = rollSound(0.1)!;
+  const fast = rollSound(BOOST_MAX_SPEED)!;
+  assert.ok(fast.volume > slow.volume && fast.pitch > slow.pitch);
+  assert.equal(fast.volume, 0.7);
+  assert.deepEqual(rollSound(-0.1), slow); // en reversa suena igual
+});

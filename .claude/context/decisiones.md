@@ -157,3 +157,10 @@ Formato: fecha — decisión — por qué — alternativas descartadas.
   se borra cada 20 ticks, así que encender un propulsor se nota en ≤1 s.
 - **Inclinación:** client entity en 1.26.0; HUD de dev para el conductor (`v`, `pitch` y efecto del
   riel) para diagnosticar en el iPad.
+
+## 2026-10-06 — fix-metro-pitch (0.3.2)
+- **Inclinación sin propiedad de entidad:** en el iPad, `setProperty("eleytren:pitch")` fallaba en cada
+  tick (el juego cargaba la entidad sin `properties`, causa sin confirmar) y llenaba el Content Log. Se
+  quita la propiedad: el pitch va en la rotación X del `teleport` (`x = -pitch`) y la animación rota
+  `body` con `query.body_x_rotation`. Por confirmar en el iPad que el cliente aplica esa rotación a la
+  entidad y el signo.
